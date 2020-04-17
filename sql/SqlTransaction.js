@@ -1,3 +1,9 @@
+/**
+ * RazorLayer
+ * Copyright (c) Simon Raichl 2020
+ * MIT License
+ */
+
 const mysql = require("mysql");
 const { getWhereQuery, handleOrderBySorting } = require("./SqlUtils");
 
