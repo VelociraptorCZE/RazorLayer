@@ -101,8 +101,12 @@ class SqlTransaction {
         return this.executeQuery("getQuery");
     }
 
-    async find (id) {
+    find (id) {
         this.where("id", id);
+        return this.findOne();
+    }
+
+    async findOne () {
         this.limit(1);
         return (await this.findAll())[0];
     }
