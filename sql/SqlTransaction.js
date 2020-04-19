@@ -6,6 +6,7 @@
 
 const mysql = require("mysql");
 const { getWhereQuery, handleOrderBySorting } = require("./SqlUtils");
+const COUNT = "count(*)";
 
 class SqlTransaction {
     constructor ({ tableName, config }) {
@@ -20,11 +21,11 @@ class SqlTransaction {
 
     getQuery () {
         const {
-            isOrderByRand,
+            isOrderByRand, isCount,
             parameters: { whereClause, limit, offset, andWhereClauses, orWhereClauses, orderByClauses }
         } = this;
 
-        let sql = `select * from ${this.tableName}`;
+        let sql = `select ${isCount ? COUNT : "*"} from ${this.tableName}`;
 
         if (whereClause) {
             sql += ` where ${getWhereQuery(whereClause)}`;
@@ -104,6 +105,11 @@ class SqlTransaction {
     find (id) {
         this.where("id", id);
         return this.findOne();
+    }
+
+    async count () {
+        this.isCount = true;
+        return (await this.findOne())[COUNT];
     }
 
     async findOne () {
